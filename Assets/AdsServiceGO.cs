@@ -6,6 +6,7 @@ using GoogleMobileAds.Api;
 using GoogleMobileAds;
 using Facebook.MiniJSON;
 
+// Gameobject for ads, just drag and drop
 public class AdsServiceGO : MonoBehaviour {
 
     public GameObject PrefabCustomBanner;
