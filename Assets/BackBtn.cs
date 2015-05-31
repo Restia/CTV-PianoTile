@@ -6,20 +6,24 @@ public class BackBtn : MonoBehaviour {
     public GameObject BtnBg;
     private Color m_NormColor;
     private Color m_DownColor;
+    public bool Enabled = true;
 
     void OnMouseDown()
     {
-        BtnBg.renderer.material.SetColor("_Color", m_DownColor);
+        if (Enabled)
+            BtnBg.renderer.material.SetColor("_Color", m_DownColor);
     }
 
     void OnMouseUp()
     {
-        BtnBg.renderer.material.SetColor("_Color", m_NormColor);
+        if (Enabled)
+            BtnBg.renderer.material.SetColor("_Color", m_NormColor);
     }
 
     void OnMouseUpAsButton()
     {
-        TestController.Instance.BackToMainMenu();
+        if (Enabled)
+            TestController.Instance.BackToMainMenu();
     }
 
 	// Use this for initialization

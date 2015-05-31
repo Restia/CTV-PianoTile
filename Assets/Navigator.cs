@@ -24,6 +24,8 @@ public class Navigator : MonoBehaviour {
     private Vector3 m_LastMousePos;
     private float m_OrgX;
 
+    public bool Enabled = true;
+
     private void btNew_Clicked()
     {
         if (TestController.Instance.IsSliding
@@ -154,30 +156,33 @@ public class Navigator : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetMouseButtonDown(0))
+        if (Enabled)
         {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (mousePos.y >= 5.0f - m_BgHeight && mousePos.y <= 5.0f)
+            if (Input.GetMouseButtonDown(0))
             {
-                m_IsBegan = true;
-                gameObject.SendMessage("OnMouseBeginDrag");
-                m_LastMousePos = Input.mousePosition;
+                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                if (mousePos.y >= 5.0f - m_BgHeight && mousePos.y <= 5.0f)
+                {
+                    m_IsBegan = true;
+                    gameObject.SendMessage("OnMouseBeginDrag");
+                    m_LastMousePos = Input.mousePosition;
+                }
             }
-        }
 
-        if (Input.GetMouseButton(0) && m_IsBegan)
-        {
-            if (Input.mousePosition != m_LastMousePos)
+            if (Input.GetMouseButton(0) && m_IsBegan)
             {
-                m_LastMousePos = Input.mousePosition;
-                gameObject.SendMessage("OnMouseDrag");
+                if (Input.mousePosition != m_LastMousePos)
+                {
+                    m_LastMousePos = Input.mousePosition;
+                    gameObject.SendMessage("OnMouseDrag");
+                }
             }
-        }
 
-        if (Input.GetMouseButtonUp(0) && m_IsBegan)
-        {
-            m_IsBegan = false;
-            gameObject.SendMessage("OnMouseEndDrag");
+            if (Input.GetMouseButtonUp(0) && m_IsBegan)
+            {
+                m_IsBegan = false;
+                gameObject.SendMessage("OnMouseEndDrag");
+            }
         }
 	}
 }

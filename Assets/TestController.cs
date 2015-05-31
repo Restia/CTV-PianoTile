@@ -37,6 +37,9 @@ public class TestController : MonoBehaviour {
     public bool IsSliding = false;
     public bool IsRepositioning = false;
 
+    public GameObject BackBtn;
+    public GameObject NavigatorPanel;
+
     #region Board Sliding Control
 
     IEnumerator SlideLeftRoutine(int toBoardId)
@@ -155,6 +158,10 @@ public class TestController : MonoBehaviour {
         PlayerPrefs.SetString("Device ID", SystemInfo.deviceUniqueIdentifier);
         Debug.Log(SystemInfo.operatingSystem);
         PlayerPrefs.SetString("Operating System", SystemInfo.operatingSystem);
+
+        // Enable controls
+        NavigatorPanel.GetComponent<Navigator>().Enabled = true;
+        BackBtn.GetComponent<BackBtn>().Enabled = true;
 
         // Do stuffs
         StartCoroutine(UpdateScore());
@@ -392,6 +399,7 @@ public class TestController : MonoBehaviour {
         m_CurrBoardId = 0;
         if (!FB.IsInitialized)
             FB.Init(OnInitComplete);
+        else OnInitComplete();
         m_ShiftScene = Instantiate(PrefabShiftScene) as GameObject;
         m_ShiftScene.GetComponent<ShiftScene>().ShiftInWhenReady = true;
 	}

@@ -79,7 +79,6 @@ public class ItemContainer : MonoBehaviour {
         Debug.Log("Low = " + m_LowerBound);
         while (Mathf.Abs(GetLower() - m_LowerBound) > 0.001f)
         {
-            Debug.Log(GetLower());
             Vector2 tmp = Vector2.Lerp(transform.position, 
                 new Vector2(0.0f, m_LowerBound + m_GListLength), 
                 Time.time - startTime);
