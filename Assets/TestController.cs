@@ -159,10 +159,6 @@ public class TestController : MonoBehaviour {
         Debug.Log(SystemInfo.operatingSystem);
         PlayerPrefs.SetString("Operating System", SystemInfo.operatingSystem);
 
-        // Enable controls
-        NavigatorPanel.GetComponent<Navigator>().Enabled = true;
-        BackBtn.GetComponent<BackBtn>().Enabled = true;
-
         // Do stuffs
         StartCoroutine(UpdateScore());
     }
@@ -265,6 +261,9 @@ public class TestController : MonoBehaviour {
 
         m_Leaderboards[0].SetActive(true);
         BoardFooter.GetComponent<Footer>().SetRank(m_Rank[0]);
+        // Enable controls
+        NavigatorPanel.GetComponent<Navigator>().Enabled = true;
+        BackBtn.GetComponent<BackBtn>().Enabled = true;
     }
 
     private void CreateHighscoreFile(string path)

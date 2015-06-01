@@ -28,6 +28,7 @@ public class Navigator : MonoBehaviour {
 
     private void btNew_Clicked()
     {
+        if (!Enabled) return;
         if (TestController.Instance.IsSliding
             || TestController.Instance.IsRepositioning)
             return;
@@ -46,6 +47,7 @@ public class Navigator : MonoBehaviour {
 
     private void btHighscore_Clicked()
     {
+        if (!Enabled) return;
 //         Debug.Log("Slide= " + TestController.Instance.IsSliding);
 //         Debug.Log("Positioning= " + TestController.Instance.IsRepositioning);
         if (TestController.Instance.IsSliding
@@ -75,6 +77,7 @@ public class Navigator : MonoBehaviour {
 
     private void btFriends_Clicked()
     {
+        if (!Enabled) return;
         if (TestController.Instance.IsSliding
             || TestController.Instance.IsRepositioning)
             return;
@@ -102,6 +105,7 @@ public class Navigator : MonoBehaviour {
 
     private void btClassic_Clicked()
     {
+        if (!Enabled) return;
         if (TestController.Instance.IsSliding
             || TestController.Instance.IsRepositioning)
             return;

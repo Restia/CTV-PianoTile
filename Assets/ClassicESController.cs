@@ -19,23 +19,33 @@ public class ClassicESController : MonoBehaviour {
     public GameObject BtnLeaderBoard;
 
     private bool m_NoHighScore = false;
+    private bool m_DisableFunction = true;
 
     private void Exit_Clicked()
     {
-        m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
-        Application.LoadLevelAdditive("MenuScene");
+        if (!m_DisableFunction)
+        {
+            m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
+            Application.LoadLevelAdditive("MenuScene");
+        }
     }
 
     private void Again_Clicked()
     {
-        m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
-        Application.LoadLevelAdditive("ClassicScene");
+        if (!m_DisableFunction)
+        {
+            m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
+            Application.LoadLevelAdditive("ClassicScene");
+        }
     }
 
     private void LB_Clicked()
     {
-        m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
-        Application.LoadLevelAdditive("LeaderBoard1");
+        if (!m_DisableFunction)
+        {
+            m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
+            Application.LoadLevelAdditive("LeaderBoard1");
+        }
     }
 
     private void CreateHighscoreFile(string path)
@@ -134,11 +144,17 @@ public class ClassicESController : MonoBehaviour {
         EndImage.GetComponent<SpriteRenderer>().sprite = spr;
     }
 
+    private void ShiftSceneCallback()
+    {
+        m_DisableFunction = false;
+    }
+
     // Use this for initialization
     void Start()
     {
         m_ShiftScene = Instantiate(PrefabShiftScene) as GameObject;
         m_ShiftScene.GetComponent<ShiftScene>().ShiftInWhenReady = true;
+        m_ShiftScene.GetComponent<ShiftScene>().ShiftInCallback += ShiftSceneCallback;
     }
 
     // Update is called once per frame
