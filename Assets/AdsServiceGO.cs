@@ -9,16 +9,19 @@ using Facebook.MiniJSON;
 // Gameobject for ads, just drag and drop
 public class AdsServiceGO : MonoBehaviour {
 
+    // Prefabs to generate 5play banner
     public GameObject PrefabCustomBanner;
     public GameObject PrefabCustomPopup;
 
+    // Ads banners of Google admob and 5play
     private BannerView m_AdmobBanner;
     private GameObject m_CustomBanner;
 
+    // Ads popup (intersititial) of Google admob and 5play
     private InterstitialAd m_Popup;
     private GameObject m_CustomPopup;
 
-    // information
+    // information for generating Ads
     private string m_AdmobBannerId = "";
     private string m_AdmobPopupId = "";
     private bool m_Enable = false;
@@ -30,15 +33,22 @@ public class AdsServiceGO : MonoBehaviour {
     private int m_NoPopupTimesShown = 0;
     private string m_CustomBannerLink;
     private string m_CustomPopupLink;
+    private string m_BannerClickUrl;
+    private string m_PopupClickUrl;
 
+    // Get Ads info had got from starting game
     private void GetInfo()
     {
         m_AdmobBannerId = PlayerPrefs.GetString("AdmobBannerId");
         m_AdmobPopupId = PlayerPrefs.GetString("AdmobPopupId");
         m_CustomBannerLink = PlayerPrefs.GetString("5playBannerLink");
         m_CustomPopupLink = PlayerPrefs.GetString("5playPopupLink");
+        m_BannerClickUrl = PlayerPrefs.GetString("5playBannerClickUrl");
+        m_PopupClickUrl = PlayerPrefs.GetString("5playPopupClickUrl");
         Debug.Log(m_CustomBannerLink);
+        Debug.Log(m_BannerClickUrl);
         Debug.Log(m_CustomPopupLink);
+        Debug.Log(m_PopupClickUrl);
 
         if (m_AdmobBannerId.Length == 0 || m_AdmobPopupId.Length == 0)
             return;
@@ -99,10 +109,10 @@ public class AdsServiceGO : MonoBehaviour {
         if (request.text.Length != 0)
         {
             // Success
-            Debug.Log("Gotcha!");
             Dictionary<string, object> resultDict = Json.Deserialize(request.text) as Dictionary<string, object>;
 
             PlayerPrefs.SetString("5playBannerLink", (string)resultDict["img_banner"]);
+            PlayerPrefs.SetString("5playBannerClickUrl", (string)resultDict["store_url"]);
         }
         else
         {
@@ -132,10 +142,10 @@ public class AdsServiceGO : MonoBehaviour {
         if (request.text.Length != 0)
         {
             // Success
-            Debug.Log("Gotcha!");
             Dictionary<string, object> resultDict = Json.Deserialize(request.text) as Dictionary<string, object>;
 
             PlayerPrefs.SetString("5playPopupLink", (string)resultDict["img_vertical"]);
+            PlayerPrefs.SetString("5playPopupClickUrl", (string)resultDict["store_url"]);
         }
         else
         {
@@ -153,7 +163,7 @@ public class AdsServiceGO : MonoBehaviour {
             // 5play ads
             Debug.Log("5play banner");
             GameObject obj = Instantiate(PrefabCustomBanner) as GameObject;
-            obj.GetComponent<CustomBanner>().SetImageLink(m_CustomBannerLink);
+            obj.GetComponent<CustomBanner>().SetImageLink(m_CustomBannerLink, m_BannerClickUrl);
             StartCoroutine(Get5PlayBannerAds());
             obj.transform.parent = gameObject.transform;
             m_AdmobBannerTimesShown = 0;
@@ -207,7 +217,7 @@ public class AdsServiceGO : MonoBehaviour {
                 // 5play ads
                 Debug.Log("5play popup");
                 GameObject obj = Instantiate(PrefabCustomPopup) as GameObject;
-                obj.GetComponent<CustomPopup>().SetImageLink(m_CustomPopupLink);
+                obj.GetComponent<CustomPopup>().SetImageLink(m_CustomPopupLink, m_PopupClickUrl);
                 obj.transform.parent = gameObject.transform;
                 StartCoroutine(Get5PlayPopupAds());
                 m_AdmobPopupTimesShown = 0;

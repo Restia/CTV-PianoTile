@@ -27,6 +27,7 @@ public class ClassicESController : MonoBehaviour {
         {
             m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
             Application.LoadLevelAdditive("MenuScene");
+            m_DisableFunction = true;
         }
     }
 
@@ -36,7 +37,46 @@ public class ClassicESController : MonoBehaviour {
         {
             m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
             Application.LoadLevelAdditive("ClassicScene");
+            m_DisableFunction = true;
         }
+    }
+
+    private void LoginCallback(FBResult result)
+    {
+        Debug.Log("done login.");
+        FB.Feed(
+            toId: "",
+            link: "",
+            linkName: "WhiteTiles",
+            linkCaption: "Don't tab the white tiles",
+            linkDescription: "I completed Classic Mode in " + string.Format("{0:0.0000}", PlayerPrefs.GetFloat("ClassicScore")) + " seconds.",
+            picture: "",
+            mediaSource: "",
+            actionName: "",
+            actionLink: "",
+            reference: ""
+        );
+    }
+
+    private void InitCallback()
+    {
+        Debug.Log("done init");
+        if (!FB.IsLoggedIn)
+        {
+            Debug.Log("Call login");
+            FB.Login("email,user_friends,public_profile", LoginCallback);
+        }
+        else
+        {
+            LoginCallback(null);
+        }
+    }
+
+    private void Share_Clicked()
+    {
+        if (!FB.IsInitialized)
+            FB.Init(InitCallback);
+        else InitCallback();
     }
 
     private void LB_Clicked()
@@ -83,6 +123,7 @@ public class ClassicESController : MonoBehaviour {
 
         btExit.GetComponent<Button>().EvtClicked += Exit_Clicked;
         btAgain.GetComponent<Button>().EvtClicked += Again_Clicked;
+        btShare.GetComponent<Button>().EvtClicked += Share_Clicked;
         BtnLeaderBoard.GetComponent<ESLBButton>().EvtClicked += LB_Clicked;
 
         string path = Application.persistentDataPath;
@@ -160,6 +201,15 @@ public class ClassicESController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-
+        if (!m_DisableFunction)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                m_DisableFunction = true;
+                StopAllCoroutines();
+                m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
+                Application.LoadLevelAdditive("MenuScene");
+            }
+        }
     }
 }

@@ -42,6 +42,8 @@ public class ClassicController : MonoBehaviour {
     private int m_RowNum;
     private int m_MaxRowNum;
 
+    private bool m_DisableFunction = true;
+
     IEnumerator PoolRowRoutine()
     {
         yield return new WaitForEndOfFrame();
@@ -131,6 +133,11 @@ public class ClassicController : MonoBehaviour {
         }
     }
 
+    private void ShiftSceneCallback()
+    {
+        m_DisableFunction = false;
+    }
+
 	// Use this for initialization
 	void Start () {
         m_Rows = new LinkedList<GameObject>();
@@ -161,21 +168,33 @@ public class ClassicController : MonoBehaviour {
         Debug.Log("Performance impace! Instantiate!");
         m_ShiftScene = Instantiate(PrefabShiftScene) as GameObject;
         m_ShiftScene.GetComponent<ShiftScene>().ShiftInWhenReady = true;
+        m_ShiftScene.GetComponent<ShiftScene>().ShiftInCallback += ShiftSceneCallback;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetMouseButtonDown(0) && !IsGameOver)
+        if (!m_DisableFunction)
         {
-            foreach (GameObject obj in m_Rows)
+            if (Input.GetMouseButtonDown(0) && !IsGameOver)
             {
-                obj.SendMessage("PlayerTapped", Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                foreach (GameObject obj in m_Rows)
+                {
+                    obj.SendMessage("PlayerTapped", Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                }
             }
-        }
-        if (SuccessThisTouch)
-        {
-            LastId++;
-            SuccessThisTouch = false;
+            if (SuccessThisTouch)
+            {
+                LastId++;
+                SuccessThisTouch = false;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                m_DisableFunction = true;
+                StopAllCoroutines();
+                m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
+                Application.LoadLevelAdditive("MenuScene");
+            }
         }
 	}
 }

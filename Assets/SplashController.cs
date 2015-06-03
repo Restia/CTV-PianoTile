@@ -8,6 +8,8 @@ using Facebook.MiniJSON;
 public class SplashController : MonoBehaviour {
 
     public GameObject PrefabShiftScene;
+
+    public float SplashScreenTime = 0.5f;
     private GameObject m_ShiftScene;
 
     private void CreateNewSettingsFile(string path)
@@ -83,6 +85,8 @@ public class SplashController : MonoBehaviour {
             PlayerPrefs.SetString("AdmobPopupId", (string)config["admodID_popup"]);
             PlayerPrefs.SetString("5playBannerLink", (string)resultDict["img_banner"]);
             PlayerPrefs.SetString("5playPopupLink", (string)resultDict["img_vertical"]);
+            PlayerPrefs.SetString("5playBannerClickUrl", (string)resultDict["store_url"]);
+            PlayerPrefs.SetString("5playPopupClickUrl", (string)resultDict["store_url"]);
 
             PlayerPrefs.SetInt("AdmobBannerTimes", 2);
             PlayerPrefs.SetInt("AdmobPopupTimes", 1);
@@ -103,7 +107,7 @@ public class SplashController : MonoBehaviour {
 
     IEnumerator StartGameRoutine()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(SplashScreenTime);
         Application.LoadLevelAdditive("MenuScene");
         m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
     }

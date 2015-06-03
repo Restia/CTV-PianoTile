@@ -28,6 +28,7 @@ public class FailedSceneController : MonoBehaviour {
         {
             m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
             Application.LoadLevelAdditive("MenuScene");
+            m_DisableFunction = true;
         }
         // AdsService.DestroyAds();
     }
@@ -38,6 +39,7 @@ public class FailedSceneController : MonoBehaviour {
         {
             m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
             Application.LoadLevelAdditive("ArcadeScene");
+            m_DisableFunction = true;
         }
         // AdsService.DestroyAds();
     }
@@ -47,10 +49,10 @@ public class FailedSceneController : MonoBehaviour {
         Debug.Log("done login.");
         FB.Feed(
             toId: "",
-            link: "http://google.com",
+            link: "",
             linkName: "WhiteTiles",
             linkCaption: "Don't tab the white tiles",
-            linkDescription: "I scored a new record",
+            linkDescription: "I scored " + PlayerPrefs.GetInt("Score") + " points in Arcade Mode.",
             picture: "",
             mediaSource: "",
             actionName: "",
@@ -77,6 +79,7 @@ public class FailedSceneController : MonoBehaviour {
     {
         if (!FB.IsInitialized)
             FB.Init(InitCallback);
+        else InitCallback();
     }
 
     private void LB_Clicked()
@@ -183,6 +186,15 @@ public class FailedSceneController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+        if (!m_DisableFunction)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                m_DisableFunction = true;
+                StopAllCoroutines();
+                m_ShiftScene.GetComponent<ShiftScene>().DoShiftOut("");
+                Application.LoadLevelAdditive("MenuScene");
+            }
+        }
 	}
 }

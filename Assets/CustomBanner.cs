@@ -8,6 +8,7 @@ public class CustomBanner : MonoBehaviour {
 
     private Mesh m_Mesh;
     private string m_ImgLink;
+    private string m_StoreUrl;
 
     void OnDestroy()
     {
@@ -23,9 +24,15 @@ public class CustomBanner : MonoBehaviour {
         yield return null;
     }
 
-    public void SetImageLink(string str)
+    public void SetImageLink(string str, string url)
     {
         m_ImgLink = str;
+        m_StoreUrl = url;
+    }
+
+    void OnMouseUpAsButton()
+    {
+        Application.OpenURL(m_StoreUrl);
     }
 
 	// Use this for initialization
@@ -50,6 +57,9 @@ public class CustomBanner : MonoBehaviour {
 
         GetComponent<MeshFilter>().mesh = m_Mesh;
         StartCoroutine(DownloadImage());
+
+        BoxCollider2D box = GetComponent<BoxCollider2D>();
+        box.size = new Vector2(Width, Height);
 	}
 	
 	// Update is called once per frame
